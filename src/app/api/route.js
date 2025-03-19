@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-  const consumer_key2 = 'ck_bcada2f49327a0cf50a1ea0bf198b6cd27797d7f';
-  const consumer_secret2 = 'cs_7593f05559f1438f7611bf3d9a522798777b6359';
+  const consumer_key2 = process.env.CONSUMER_KEY;
+  const consumer_secret2 = process.env.CONSUMER_SECRET;
 
   try {
     const response = await fetch('https://toryskateshop.com/wp-json/wc/v3/products', {

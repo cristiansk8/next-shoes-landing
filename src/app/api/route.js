@@ -17,7 +17,8 @@ export async function GET() {
 
     const data = await response.json();
     return NextResponse.json(data);
-  } catch (error) {
+  } catch {
+    // Sin declarar `error` si no lo necesitas
     return NextResponse.json({ message: 'Error fetching products' }, { status: 500 });
   }
 }

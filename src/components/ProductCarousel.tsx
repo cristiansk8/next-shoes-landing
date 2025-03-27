@@ -62,7 +62,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({ products }) => {
         {filteredProducts.map((product) => (
           <SwiperSlide key={product.id}>
             <div className="border rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <div className="relative h-48">
+              <div className="relative h-72">
                 <Image
                   src={product.images[0].src} // TypeScript sabe que `images` está definida
                   alt={product.name}

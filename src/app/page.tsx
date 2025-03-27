@@ -1,16 +1,20 @@
 import ProductCarousel from "@/components/ProductCarousel";
 import { Product } from "@/app/types"; // Asegúrate de importar el tipo Product
+import api from "@/lib/woocommerce";
+
 
 async function getProducts2(): Promise<Product[]> {
-  const url = process.env.urlLocal
-  const res = await fetch(url+'/api');
-  
+  try {
+    const response = await api.get<Product[]>("products", {
+      per_page: 10,
+      status: "publish",
+    });
 
-  if (!res.ok) {
-    throw new Error("Error al obtener los productos");
+    return response.data; // Ahora TypeScript sabe que `data` es de tipo `Product[]`
+  } catch (error) {
+    console.error("Error al obtener productos:", error);
+    return [];
   }
-
-  return res.json();
 }
 
 export default async function Home() {

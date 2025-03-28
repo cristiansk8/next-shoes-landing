@@ -10,7 +10,7 @@ async function getProductsByCategory(categoryId: number): Promise<Product[]> {
     }
 
     const response = await api.get<Product[]>("products", {
-      per_page: 10,  
+      per_page: 10,
       category: categoryId.toString(),
       status: "publish",
     });
@@ -36,16 +36,20 @@ export default async function Home() {
 
   return (
     <div className="flex flex-col items-center">
-      <h1 className="text-3xl font-bold text-center my-8">Productos</h1>
+      <div id="nike" className="items-center md:items-start">
+        <h2 className="text-2xl font-semibold mt-6">Nike SB</h2>
+        <ProductCarousel products={productsCategory1} />
+      </div>
 
-      <h2 className="text-2xl font-semibold mt-6">Nike SB</h2>
-      <ProductCarousel products={productsCategory1} />
+      <div id="DC" className="items-center md:items-start">
+        <h2 className="text-2xl font-semibold mt-6">DC shoes</h2>
+        <ProductCarousel products={productsCategory2} />
+      </div>
 
-      <h2 className="text-2xl font-semibold mt-6">DC shoes</h2>
-      <ProductCarousel products={productsCategory2} />
-
-      <h2 className="text-2xl font-semibold mt-6">Vans</h2>
-      <ProductCarousel products={productsCategory3} />
+      <div id="vans" className="items-center md:items-start">
+        <h2 className="text-2xl font-semibold mt-6">Vans</h2>
+        <ProductCarousel products={productsCategory3} />
+      </div>
     </div>
   );
 }

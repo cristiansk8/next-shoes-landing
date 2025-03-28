@@ -43,7 +43,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({ products }) => {
         navigation={true}
         modules={[Autoplay, Pagination, Navigation]}
         breakpoints={{
-          320: { slidesPerView: 1 },
+          320: { slidesPerView: 2 },
           640: { slidesPerView: 2 },
           1024: { slidesPerView: 3 },
           1280: { slidesPerView: 4 },

@@ -70,7 +70,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({ products }) => {
                 {/* Botón Comprar - centrado y con margen superior automático */}
                 <div className="mt-auto">
                 <Link 
-                    href={`/productos`} // Ruta dinámica
+                    href={`https://wa.link/qkf281`} // Ruta dinámica
                     className="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-2 px-4 rounded-md transition-colors duration-300"
                   >
                     Comprar

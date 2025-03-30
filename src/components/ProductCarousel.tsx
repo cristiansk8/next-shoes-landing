@@ -53,7 +53,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({ products }) => {
           <SwiperSlide key={product.id}>
             <div className="border rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col h-full">
               {/* Imagen del producto */}
-              <div className="relative h-48 md:h-72 flex-shrink-0">
+              <div className="relative h-48">
                 <Image
                   src={product.images[0].src}
                   alt={product.name}

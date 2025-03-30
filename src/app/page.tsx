@@ -35,19 +35,19 @@ export default async function Home() {
   ]);
 
   return (
-    <div className="flex flex-col items-center">
-      <div id="nike" className="items-center md:items-start">
-        <h2 className="text-2xl font-semibold mt-6">Nike SB</h2>
+    <div className="">
+      <div id="nike" className="">
+        <h2 className="">Nike SB</h2>
         <ProductCarousel products={productsCategory1} />
       </div>
 
-      <div id="DC" className="items-center md:items-start">
-        <h2 className="text-2xl font-semibold mt-6">DC shoes</h2>
+      <div id="DC" className="">
+        <h2 className="">DC shoes</h2>
         <ProductCarousel products={productsCategory2} />
       </div>
 
-      <div id="vans" className="items-center md:items-start">
-        <h2 className="text-2xl font-semibold mt-6">Vans</h2>
+      <div id="vans" className="">
+        <h2 className="">Vans</h2>
         <ProductCarousel products={productsCategory3} />
       </div>
     </div>

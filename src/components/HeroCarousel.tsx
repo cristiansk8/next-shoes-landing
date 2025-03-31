@@ -1,15 +1,11 @@
 "use client";
 
-import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Pagination, Navigation } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
+import { Autoplay, Pagination } from "swiper/modules";
 import Image from "next/image";
 import Link from "next/link";
 
-interface HeroBanner {
+interface Banner {
   id: string;
   imageDesktop: string;
   imageMobile: string;
@@ -17,84 +13,43 @@ interface HeroBanner {
   linkUrl: string;
 }
 
-interface HeroCarouselProps {
-  banners: HeroBanner[];
-}
-
-const HeroCarousel: React.FC<HeroCarouselProps> = ({ banners }) => {
-  // Función mejorada para manejar las URLs de imágenes
-  const getValidImageUrl = (imgPath: string) => {
-    try {
-      // Si es una URL absoluta válida, la devolvemos
-      if (/^https?:\/\//.test(imgPath)) {
-        return imgPath;
-      }
-      
-      // Para rutas relativas, eliminamos cualquier slash inicial
-      const cleanPath = imgPath.startsWith('/') ? imgPath.slice(1) : imgPath;
-      
-      // Construimos la URL basada en la ubicación actual
-      return new URL(cleanPath, window.location.origin).toString();
-    } catch (error) {
-      console.error("Error al construir URL de imagen:", error);
-      // Fallback a una imagen por defecto o cadena vacía
-      return "/default-banner.jpg";
-    }
-  };
+export default function HeroCarousel({ banners }: { banners: Banner[] }) {
+  if (!banners || banners.length === 0) return null;
 
   return (
     <div className="w-full">
       <Swiper
-        spaceBetween={0}
-        slidesPerView={1}
-        loop={true}
-        autoplay={{
-          delay: 5000,
-          disableOnInteraction: false,
-        }}
-        speed={1000}
-        pagination={{
-          clickable: true,
-        }}
-        navigation={true}
-        modules={[Autoplay, Pagination, Navigation]}
+        modules={[Autoplay, Pagination]}
+        autoplay={{ delay: 5000, disableOnInteraction: false }}
+        pagination={{ clickable: true }}
+        loop={banners.length > 1}
         className="hero-swiper"
       >
         {banners.map((banner) => (
           <SwiperSlide key={banner.id}>
-            <Link href={banner.linkUrl} passHref>
-              <div className="relative w-full h-[300px] md:h-[500px] cursor-pointer">
-                {/* Imagen para mobile */}
-                <div className="md:hidden w-full h-full">
+            <Link href="/" passHref>
+              <div className="group cursor-pointer">
+                {/* Desktop Image */}
+                <div className="hidden md:block relative w-full h-[500px]">
                   <Image
-                    src={getValidImageUrl(banner.imageMobile)}
-                    alt={banner.altText || "Banner promocional"}
+                    src={banner.imageDesktop}
+                    alt={banner.altText}
                     fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 100vw"
-                    quality={100}
-                    priority
-                    className="object-cover hover:opacity-95 transition-opacity duration-300"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = "/default-banner.jpg";
-                    }}
+                    className="object-cover"
+                    priority={banners.indexOf(banner) < 2}
+                    sizes="100vw"
                   />
                 </div>
                 
-                {/* Imagen para desktop */}
-                <div className="hidden md:block w-full h-full">
+                {/* Mobile Image */}
+                <div className="md:hidden relative w-full h-[300px]">
                   <Image
-                    src={getValidImageUrl(banner.imageDesktop)}
-                    alt={banner.altText || "Banner promocional"}
+                    src={banner.imageMobile}
+                    alt={banner.altText}
                     fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 100vw"
-                    quality={100}
-                    priority
-                    className="object-cover hover:opacity-95 transition-opacity duration-300"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = "/default-banner.jpg";
-                    }}
+                    className="object-cover"
+                    priority={banners.indexOf(banner) < 2}
+                    sizes="100vw"
                   />
                 </div>
               </div>
@@ -104,6 +59,4 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ banners }) => {
       </Swiper>
     </div>
   );
-};
-
-export default HeroCarousel;
+}

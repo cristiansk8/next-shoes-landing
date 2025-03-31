@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import Image from "next/image"; // Importa el componente Image
-import logo from "@/public/images/logo.png";  // Ajusta la ruta
 
 
 
@@ -44,7 +43,7 @@ export default function Nav() {
           {/* Logo */}
           <Link href="/" className="flex items-center">
             <Image
-              src={logo} // Ruta relativa desde la carpeta public
+              src="/logo.png" // Ruta relativa desde la carpeta public
               alt="Ritzi"
               width={160} // Ajusta según el ancho de tu logo
               height={40} // Ajusta según la altura de tu logo

@@ -1,6 +1,7 @@
 import ProductCarousel from "@/components/ProductCarousel";
 import { Product } from "@/app/types"; // Asegúrate de importar el tipo Product
 import api from "@/lib/woocommerce";
+import HeroCarousel from "@/components/HeroCarousel";
 
 
 async function getProductsByCategory(categoryId: number): Promise<Product[]> {
@@ -24,6 +25,23 @@ async function getProductsByCategory(categoryId: number): Promise<Product[]> {
 
 
 export default async function Home() {
+  const banners = [
+    {
+      id: "1",
+      imageDesktop: "https://toryskateshop.com/wp-content/uploads/2024/12/banner-web-ishod.jpg",
+      imageMobile: "https://toryskateshop.com/wp-content/uploads/2024/12/banner-web-mobile-ishod.jpg",
+      altText: "Oferta especial",
+      linkUrl: "/#nike",
+    },
+    {
+      id: "2",
+      imageDesktop: "https://toryskateshop.com/wp-content/uploads/2024/02/banner-web-1.jpg",
+      imageMobile: "https://toryskateshop.com/wp-content/uploads/2024/02/2-28-20DCLynxBlog1_1024x1024.webp",
+      altText: "Nueva colección",
+      linkUrl: "/#DC",
+    },
+  ];
+
   const category1Id = 203; // Reemplaza con el ID real de la primera categoría
   const category2Id = 219; // Reemplaza con el ID real de la segunda categoría
   const category3Id = 211; // Reemplaza con el ID real de la segunda categoría
@@ -36,6 +54,7 @@ export default async function Home() {
 
   return (
     <div className="">
+      <HeroCarousel banners={banners} />
       <div id="nike" className="">
         <h2 className="">Nike SB</h2>
         <ProductCarousel products={productsCategory1} />

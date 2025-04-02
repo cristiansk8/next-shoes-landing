@@ -19,18 +19,20 @@ async function getProductsByCategory(categoryId: number): Promise<Product[]> {
 }
 
 export default async function Home() {
-  const [slides, productsCategory1, productsCategory2, productsCategory3] = await Promise.all([
+  const [slides, productsCategory1, productsCategory2, productsCategory3, productsCategory4,productsCategory5 ] = await Promise.all([
     getHomeSlides(),
     getProductsByCategory(203), // Nike SB
     getProductsByCategory(219), // DC shoes
     getProductsByCategory(211), // Vans
+    getProductsByCategory(204), // Adidas
+    getProductsByCategory(220), // Runnign
   ]);
 
   // Verificación en consola de los datos recibidos
   console.log('Slides recibidos:', slides);
 
   return (
-    <div className="">
+    <div className="pt-26">
       {/* Hero Slider */}
       {slides.length > 0 ? (
         <HeroCarousel banners={slides.map(slide => ({
@@ -45,24 +47,37 @@ export default async function Home() {
           <p>No hay banners disponibles</p>
         </div>
       )}
-      
+
       {/* Nike Products */}
       <div id="nike" className="">
-        <h2 className="">Nike SB</h2>
+        <h2 className="text-center font-bold text-3xl pt-8">Nike SB</h2>
         <ProductCarousel products={productsCategory1} />
       </div>
 
       {/* DC Products */}
       <div id="DC" className="">
-        <h2 className="">DC shoes</h2>
+        <h2 className="text-center font-bold text-3xl pt-8">DC shoes</h2>
         <ProductCarousel products={productsCategory2} />
       </div>
 
       {/* Vans Products */}
       <div id="vans" className="">
-        <h2 className="">Vans</h2>
+        <h2 className="text-center font-bold text-3xl pt-8">Vans</h2>
         <ProductCarousel products={productsCategory3} />
       </div>
+
+      {/* Adidas Products */}
+      <div id="vans" className="">
+        <h2 className="text-center font-bold text-3xl pt-8">Adidas</h2>
+        <ProductCarousel products={productsCategory4} />
+      </div>
+      
+      {/* Adidas Products */}
+      <div id="vans" className="">
+        <h2 className="text-center font-bold text-3xl pt-8">Running</h2>
+        <ProductCarousel products={productsCategory5} />
+      </div>
+
     </div>
   );
 }

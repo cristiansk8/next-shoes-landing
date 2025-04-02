@@ -8,7 +8,15 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import Image from "next/image";
 import { Product } from "@/app/types"; // Asegúrate de importar el tipo Product
-import Link from "next/link";
+
+  // Función para generar el enlace de WhatsApp
+  const generateWhatsAppLink = (productName: string) => {
+    const phoneNumber = "3045304425"; // Tu número sin espacios
+    const encodedMessage = encodeURIComponent(
+      `Hola Ritzzi, quiero comprar ${productName} en talla:`
+    );
+    return `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+  };
 
 type ProductWithImages = Product & {
   images: { src: string }[];
@@ -53,7 +61,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({ products }) => {
           <SwiperSlide key={product.id}>
             <div className="border rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col h-full">
               {/* Imagen del producto */}
-              <div className="relative h-48">
+              <div className="relative h-72">
                 <Image
                   src={product.images[0].src}
                   alt={product.name}
@@ -69,12 +77,14 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({ products }) => {
                 
                 {/* Botón Comprar - centrado y con margen superior automático */}
                 <div className="mt-auto">
-                <Link 
-                    href={`https://wa.link/qkf281`} // Ruta dinámica
-                    className="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-2 px-4 rounded-md transition-colors duration-300"
+                  <a
+                    href={generateWhatsAppLink(product.name)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full bg-green-600 hover:bg-green-700 text-white text-center py-2 px-4 rounded-md transition-colors duration-300"
                   >
                     Comprar
-                  </Link>
+                  </a>
                 </div>
               </div>
             </div>

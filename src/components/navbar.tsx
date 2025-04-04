@@ -2,36 +2,45 @@
 "use client";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import Image from "next/image"; // Importa el componente Image
+import Image from "next/image";
+import { getMenuCategories } from "@/lib/sliderService";
 
-
-
-const menuItems = [
-  { id: 1, title: "Nike", url: "#nike" },
-  { id: 2, title: "DC", url: "#DC" },
-  { id: 3, title: "Vans", url: "#vans" },
-];
+interface Category {
+  id: number;
+  name: string;
+  slug: string;
+}
 
 export default function Nav() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Cerrar menú al cambiar tamaño de pantalla (opcional)
+  // Obtener categorías
+  useEffect(() => {
+    getMenuCategories()
+    
+      .then((data) => {
+        setCategories(data);
+      })
+      .catch((error) => {
+        console.error("Error loading categories:", error);
+        setCategories([]); // Fallback con array vacío
+      })
+      .finally(() => setLoading(false));
+  }, []);
+  // Efectos para responsive y scroll (se mantienen igual)
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setIsMobileMenuOpen(false);
-      }
+      if (window.innerWidth >= 768) setIsMobileMenuOpen(false);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Efecto para navbar fijo con scroll
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -43,41 +52,38 @@ export default function Nav() {
           {/* Logo */}
           <Link href="/" className="flex items-center">
             <Image
-              src="/logo.png" // Ruta relativa desde la carpeta public
+              src="/logo.png"
               alt="Ritzi"
-              width={160} // Ajusta según el ancho de tu logo
-              height={40} // Ajusta según la altura de tu logo
-              className="h-17 w-auto" // Clases opcionales para control adicional
-              priority // Opcional: carga prioritariamente el logo
+              width={160}
+              height={40}
+              className="h-17 w-auto"
+              priority
             />
           </Link>
 
-          {/* Menú Desktop (hidden en móvil) */}
-          <ul className="hidden md:flex space-x-8">
-            {menuItems.map((item) => (
-              <li key={item.id}>
-                <Link
-                  href={item.url}
-                  className="text-gray-800 hover:text-blue-600 transition"
-                >
-                  {item.title}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          {/* Menú Desktop */}
+          {!loading && (
+            <ul className="hidden md:flex space-x-8">
+              {categories.map((category) => (
+                <li key={category.id}>
+                  <Link
+                    href={`#${category.slug}`}
+                    className="text-gray-800 hover:text-blue-600 transition"
+                  >
+                    {category.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
 
-          {/* Botón Hamburguesa (solo móvil) */}
+          {/* Botón Hamburguesa */}
           <button
             className="md:hidden focus:outline-none"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Menú"
           >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -88,29 +94,33 @@ export default function Nav() {
           </button>
         </div>
 
-        {/* Menú Móvil (Off-Canvas) */}
+        {/* Menú Móvil */}
         <div
-          className={`md:hidden fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 ${isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+          className={`md:hidden fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity ${
+            isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
           onClick={() => setIsMobileMenuOpen(false)}
         >
           <div
-            className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
+            className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform ${
+              isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+            }`}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-4 border-b">
               <Link href="/" className="text-xl font-bold text-gray-800">
-                MiSitio
+                Ritzi
               </Link>
             </div>
             <ul className="p-4 space-y-4">
-              {menuItems.map((item) => (
-                <li key={item.id}>
+              {categories.map((category) => (
+                <li key={category.id}>
                   <Link
-                    href={item.url}
+                    href={`#${category.slug}`}
                     className="block py-2 text-gray-800 hover:text-blue-600"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    {item.title}
+                    {category.name}
                   </Link>
                 </li>
               ))}

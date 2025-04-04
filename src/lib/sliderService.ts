@@ -40,6 +40,11 @@ interface ApiResponse {
   };
   count: number;
 }
+export interface Category {
+  id: number;
+  name: string;
+  slug: string;
+}
 
 export async function getHomeSlides(): Promise<ApiSlideResponse[]> {
   try {
@@ -73,6 +78,35 @@ export async function getHomeSlides(): Promise<ApiSlideResponse[]> {
 
   } catch (error) {
     console.error('Error obteniendo slides:', error);
+    return [];
+  }
+}
+
+export async function getMenuCategories(): Promise<Category[]> {
+  try {
+    const slides = await getHomeSlides();
+    console.log('Datos CRUDOS del API (slides):', slides); // 👈 Debug 1
+    
+    const uniqueCategories = Array.from(
+      new Set(
+        slides
+          .map(slide => {
+            console.log('Slide:', slide.id, 'Categoría:', slide.categoria); // 👈 Debug 2
+            return slide.categoria;
+          })
+          .filter((categoria): categoria is string => Boolean(categoria))
+      )
+    );
+
+    console.log('Categorías únicas filtradas:', uniqueCategories); // 👈 Debug 3
+    return uniqueCategories.map((name, index) => ({
+      id: index + 1,
+      name,
+      slug: name.toLowerCase().replace(/\s+/g, '-')
+    }));
+
+  } catch (error) {
+    console.error('Error al obtener categorías:', error);
     return [];
   }
 }

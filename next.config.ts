@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  transpilePackages: ['swiper'],
   images: {
     domains: ['toryskateshop.com'],
     // Para desarrollo local con imágenes en public/

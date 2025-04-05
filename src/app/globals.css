@@ -29,7 +29,4 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Ajuste de posición para el header */
-:target {
-  scroll-margin-top: 80px; /* Ajusta según tu header height */
-}
+

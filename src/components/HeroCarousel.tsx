@@ -5,33 +5,32 @@ import { Autoplay, Pagination } from "swiper/modules";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Banner } from "@/lib/sliderService";
 
-
-interface Banner {
-  id: string;
-  imageDesktop: string;
-  imageMobile: string;
-  altText: string;
-  linkUrl: string;
+interface HeroCarouselProps {
+  banners: Banner[]
 }
 
-export default function HeroCarousel({ banners }: { banners: Banner[] }) {
-  const [isMounted, setIsMounted] = useState(false);
+export default function HeroCarousel({ banners }: HeroCarouselProps) {
+  const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
-    setIsMounted(true);
-  }, []);
+    setIsMounted(true)
+  }, [])
 
-  if (!isMounted || !banners || banners.length === 0) {
+  if (!isMounted || !banners?.length) {
     return (
-      <div className="w-full h-[300px] md:h-[500px] bg-gray-100 flex items-center justify-center">
-        <p>No hay banners disponibles</p>
+      <div 
+        className="w-full h-[300px] md:h-[500px] bg-gray-100 flex items-center justify-center"
+        aria-hidden="true"
+      >
+        <p className="text-gray-500">Cargando banners...</p>
       </div>
-    );
+    )
   }
 
   return (
-    <div className="w-full">
+    <section aria-label="Galería de productos destacados" itemScope itemType="https://schema.org/ImageGallery">
       <Swiper
         modules={[Autoplay, Pagination]}
         autoplay={{
@@ -41,64 +40,84 @@ export default function HeroCarousel({ banners }: { banners: Banner[] }) {
         }}
         pagination={{
           clickable: true,
-          dynamicBullets: true
+          dynamicBullets: true,
+          renderBullet: (_, className) => 
+            `<span class="${className}" role="button" aria-label="Ir al slide ${_ + 1}"></span>`
         }}
         loop={true}
-        loopPreventsSliding={false}
-        watchSlidesProgress={true}
-        centerInsufficientSlides={true}
+        className="hero-swiper"
+        a11y={{
+          prevSlideMessage: 'Slide anterior',
+          nextSlideMessage: 'Slide siguiente',
+          paginationBulletMessage: 'Ir al slide {{index}}'
+        }}
       >
         {banners.map((banner, index) => (
-          <SwiperSlide key={`${banner.id}-${index}`}>
-            <Link href={banner.linkUrl} passHref legacyBehavior>
-              <a className="block w-full h-full">
-                {/* Desktop Image (hidden on mobile) */}
-                <div className="hidden md:block relative w-full h-[500px]">
-                  <Image
-                    src={banner.imageDesktop}
-                    alt={banner.altText}
-                    fill
-                    className="object-cover"
-                    priority={index < 2}
-                    quality={90}
-                    sizes="(max-width: 1920px) 100vw, 50vw"
-                  />
-                </div>
+          <SwiperSlide key={`${banner.id}-${index}`} role="group" aria-label={`Slide ${index + 1}`}>
+            <div itemProp="image" itemScope itemType="https://schema.org/ImageObject">
+              <Link href={banner.linkUrl} passHref legacyBehavior>
+                <a className="block w-full h-full" aria-label={banner.altText}>
+                  {/* Desktop Image */}
+                  <div className="hidden md:block relative w-full h-[500px]">
+                    <Image
+                      src={banner.imageDesktop}
+                      alt={banner.altText}
+                      fill
+                      className="object-cover"
+                      priority={index < 3}
+                      quality={90}
+                      sizes="(max-width: 1600px) 100vw, (max-width: 1800px) 50vw, 33vw"
+                      itemProp="contentUrl"
+                    />
+                    <meta itemProp="width" content="1200" />
+                    <meta itemProp="height" content="500" />
+                  </div>
 
-                {/* Mobile Image (hidden on desktop) */}
-                <div className="md:hidden relative w-full h-[300px]">
-                  <Image
-                    src={banner.imageMobile}
-                    alt={banner.altText}
-                    fill
-                    className="object-cover"
-                    priority={index < 2}
-                    quality={85}
-                    sizes="100vw"
-                  />
-                </div>
-              </a>
-            </Link>
+                  {/* Mobile Image */}
+                  <div className="md:hidden relative w-full h-[300px]">
+                    <Image
+                      src={banner.imageMobile}
+                      alt={banner.altText}
+                      fill
+                      className="object-cover"
+                      priority={index < 2}
+                      quality={85}
+                      sizes="100vw"
+                    />
+                  </div>
+                </a>
+              </Link>
+              <meta itemProp="description" content={banner.altText} />
+            </div>
           </SwiperSlide>
         ))}
       </Swiper>
 
-      {/* Estilos personalizados para la paginación */}
+      {/* Estilos mejorados */}
       <style jsx global>{`
         .hero-swiper {
-          --swiper-pagination-bullet-size: 10px;
-          --swiper-pagination-bullet-horizontal-gap: 6px;
+          --swiper-pagination-bullet-size: 12px;
+          --swiper-pagination-bullet-horizontal-gap: 8px;
           --swiper-pagination-bullet-inactive-color: #fff;
-          --swiper-pagination-bullet-inactive-opacity: 0.4;
+          --swiper-pagination-bullet-inactive-opacity: 0.6;
+          --swiper-pagination-color: #000;
         }
         .swiper-pagination-bullet {
-          transition: all 0.3s ease;
+          transition: transform 0.2s ease, opacity 0.2s ease;
+          border: 1px solid rgba(0,0,0,0.2);
+          opacity: 0.8;
         }
         .swiper-pagination-bullet-active {
+          transform: scale(1.3);
           opacity: 1;
-          transform: scale(1.2);
+          background: #000;
+        }
+        @media (max-width: 768px) {
+          .hero-swiper {
+            --swiper-pagination-bullet-size: 10px;
+          }
         }
       `}</style>
-    </div>
-  );
+    </section>
+  )
 }

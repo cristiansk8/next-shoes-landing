@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: 'Inicio | Ritzi Sneakers - Calzado Premium en Colombia',
   description: 'Descubre nuestra colección exclusiva de sneakers para hombre y mujer. Envíos a todo Colombia.',
   alternates: {
-    canonical: 'https://ritzi-sneakers.com',
+    canonical: 'https://ritzyshoes.vercel.app',
   },
   keywords: ['sneakers exclusivos', 'zapatillas premium Colombia', 'calzado deportivo de lujo'],
 }

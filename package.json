@@ -6,8 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "postinstall": "partytown copylib public/~partytown"
+    "lint": "next lint"
   },
   "dependencies": {
     "@woocommerce/woocommerce-rest-api": "^1.0.1",

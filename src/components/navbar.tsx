@@ -111,7 +111,7 @@ export default function Nav() {
 
           {/* Botón Hamburguesa */}
           <button
-            className="md:hidden focus:outline-none"
+            className="md:hidden focus:outline-none text-blue-600"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Menú"
           >

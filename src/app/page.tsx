@@ -39,9 +39,9 @@ export default async function Home() {
   // Obtener todos los datos en paralelo
   const [slides, nikeProducts, dcProducts, vansProducts, adidasProducts, runningProducts] = await Promise.all([
     getHomeSlides(),
-    getProductsByCategory(203), // Nike SB
-    getProductsByCategory(219), // DC shoes
-    getProductsByCategory(211), // Vans
+    getProductsByCategory(16), // Nike SB
+    getProductsByCategory(17), // DC shoes
+    getProductsByCategory(20), // Vans
     getProductsByCategory(204), // Adidas
     getProductsByCategory(220), // Running
   ]);

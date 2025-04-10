@@ -47,14 +47,16 @@ interface ApiResponse {
   };
   count: number;
 }
-
 export async function getHomeSlides(): Promise<ApiSlideResponse[]> {
   try {
     const response = await fetch('https://toryskateshop.com/wp-json/tory/v1/home-slider');
 
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) throw new Error();
 
     const data: ApiResponse = await response.json();
+
+    // Log para ver toda la estructura de la respuesta de la API
+    console.log("Respuesta de la API:", data);
 
     const activeSlides = data.data.reduce<ApiSlideResponse[]>((result, slide, index) => {
       const debugInfo = data.debug.slider_data_raw[index];
@@ -69,6 +71,9 @@ export async function getHomeSlides(): Promise<ApiSlideResponse[]> {
       return result;
     }, []);
 
+    // Log para ver los slides filtrados por "onoff" == true
+    console.log("Slides activos:", activeSlides);
+
     return activeSlides;
   } catch (error) {
     console.error('Error obteniendo slides:', error);
@@ -76,25 +81,34 @@ export async function getHomeSlides(): Promise<ApiSlideResponse[]> {
   }
 }
 
-export async function getMenuCategories(): Promise<Category[]> {
+export async function getActiveCategories(): Promise<Category[]> {
   try {
-    const slides = await getHomeSlides();
+    // 1. Fetch data from API
+    const response = await fetch('https://toryskateshop.com/wp-json/tory/v1/home-slider');
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
-    const uniqueCategories = Array.from(
-      new Set(
-        slides
-          .filter((slide) => slide.onoff && slide.categoria?.trim())
-          .map((slide) => slide.categoria!.trim())
+    const data: ApiResponse = await response.json();
+
+    // 2. Filter active slides with categories
+    const activeCategories = data.debug.slider_data_raw
+      .filter((item): item is DebugSlideInfo & { categoria: string } => 
+        item.onoff === true && 
+        typeof item.categoria === 'string' && 
+        item.categoria.trim() !== ''
       )
-    );
+      .map(item => item.categoria.trim());
 
+    // 3. Remove duplicates and format
+    const uniqueCategories = [...new Set(activeCategories)];
+    
     return uniqueCategories.map((name, index) => ({
       id: index + 1,
-      name,
-      slug: name.toLowerCase().replace(/\s+/g, '-'),
+      name: name,
+      slug: name.toLowerCase().replace(/\s+/g, '-')
     }));
+
   } catch (error) {
-    console.error('Error al obtener categorías:', error);
+    console.error('Error getting active categories:', error);
     return [];
   }
 }
